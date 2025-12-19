@@ -95,7 +95,9 @@ class McwClient:
         response = Protocol.parse_response(data)
         response_strem = Protocol.parse_stream(data)
         if not self.callback:
+            _LOGGER.debug("callback: %s", str(response_strem))
             if isinstance(response_strem, EventSpell):
+                _LOGGER.debug("spell: %s", response_strem.name)
                 self.callback(response_strem.name)
             elif isinstance(response_strem, EventButton):
                 if response_strem.is_big_pressed:
