@@ -76,8 +76,8 @@ class McwDevice:
                 self._data.name = ble_device.name or "(no such device)"
                 self._data.address = ble_device.address
                 self._mcw = McwClient(client)
-                self._mcw.register_callbck(self.callback)
-                self._mcw.start_notify()
+                await self._mcw.register_callbck(self.callback)
+                await self._mcw.start_notify()
 
             try:
                 # if not self._data.serial_number:
