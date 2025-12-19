@@ -202,6 +202,6 @@ class McwSellSensor(
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        _LOGGER.debug("Updated binary data")
-        self._spell = self.data
+        _LOGGER.debug("Updated spell data")
+        self._spell = self.coordinator.data
         super()._handle_coordinator_update()
