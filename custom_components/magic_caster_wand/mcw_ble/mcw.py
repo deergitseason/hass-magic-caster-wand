@@ -88,6 +88,9 @@ class McwClient:
             #await sleep(0.05)
 
     def _handler(self, _: Any, data: bytearray) -> None:
+        if self.command_data == None:
+            self.command_data = bytes(data)
+            self.event.set()
         response = Protocol.parse_response(data)
         response_strem = Protocol.parse_stream(data)
         if not self.callback:
