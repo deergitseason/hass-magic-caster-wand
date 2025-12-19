@@ -1,11 +1,6 @@
 {
   "domain": "magic_caster_wand",
   "name": "Magic Caster Wand",
-  "bluetooth": [
-    {
-      "local_name": "MCW-*"
-    }
-  ],
   "codeowners": ["@eigger"],
   "config_flow": true,
   "dependencies": ["bluetooth_adapters"],
