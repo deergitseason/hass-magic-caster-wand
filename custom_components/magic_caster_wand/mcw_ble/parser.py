@@ -79,6 +79,7 @@ class McwDevice:
                 self._data.address = ble_device.address
                 self._mcw = McwClient(client)
                 self._mcw.register_callbck(self.callback)
+                _LOGGER.debug("registered callback = %r", getattr(self._mcw, "_callback", None))
                 await self._mcw.start_notify()
 
             try:
