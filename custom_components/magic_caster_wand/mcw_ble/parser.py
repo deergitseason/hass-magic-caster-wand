@@ -61,6 +61,7 @@ class McwDevice:
         self._coordinator = cn
 
     async def callback(self, data):
+        _LOGGER.debug("spell call back: %s", data)
         self._coordinator.async_set_updated_data(data)
 
     async def update_device(self, ble_device: BLEDevice) -> BLEData:

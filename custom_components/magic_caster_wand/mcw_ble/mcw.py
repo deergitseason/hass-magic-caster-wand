@@ -88,6 +88,7 @@ class McwClient:
             #await sleep(0.05)
 
     def _handler(self, _: Any, data: bytearray) -> None:
+        _LOGGER.debug("Received: %s", data.hex())
         if self.command_data == None:
             self.command_data = bytes(data)
             self.event.set()
@@ -129,7 +130,6 @@ class McwClient:
     async def read(self, timeout: float = 5.0) -> bytes:
         await wait_for(self.event.wait(), timeout)
         data = self.command_data or b""
-        _LOGGER.debug("Received: %s", data.hex())
         return data
 
     async def write_command(self, packet: bytes) -> bytes:
