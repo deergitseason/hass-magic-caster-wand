@@ -17,11 +17,12 @@ repository into the `custom_components/magic_caster_wand` directory.
 2. Restart Home Assistant.
 
 ## Spells & Motions
+⬆ ⬇ ⬅ ➡ ⬈ ⬉ ⬊ ⬋
 | Spell | Motion | Description |
 |------|--------|-------------|
 | Protego | ⬇ | Downward hand motion (arrow-like) |
 | Serpensortia | ⬆ | Upward hand motion |
-| Lumos | ⬅ ⬈ ⬇ | Draw a triangular motion: move left, then diagonally up to the right, then straight down |
+| Lumos | ⬅ ⬈ ⬊ | Draw a triangular motion: move left, then diagonally up to the right, then straight down |
 | ... |  |  |
 
   
