@@ -31,6 +31,7 @@ from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
 )
 from homeassistant.util.unit_system import METRIC_SYSTEM
+from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN
 
@@ -213,6 +214,6 @@ class McwSellSensor(
         _LOGGER.debug("Updated spell data")
         self._spell = self.coordinator.data
         self._attr_extra_state_attributes["last_updated"] = (
-            datetime.now(timezone.utc).isoformat()
+            dt_util.now()
         )
         super()._handle_coordinator_update()
