@@ -1,6 +1,9 @@
 # hass-magic-caster-wand
 Harry Potter: Magic Caster Wand Home Assistant Integration
 
+<img width="1703" height="851" alt="image" src="https://github.com/user-attachments/assets/31043ee9-4582-4d6f-a71f-8294a2fdd0d2" />
+
+
 ## 💬 Feedback & Support
 
 🐞 Found a bug? Let us know via an [Issue](https://github.com/eigger/hass-magic-caster-wand/issues).  
