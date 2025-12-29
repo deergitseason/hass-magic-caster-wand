@@ -40,6 +40,23 @@ Harry Potter: Magic Caster Wand Home Assistant Integration
 repository into the `custom_components/magic_caster_wand` directory.
 2. Restart Home Assistant.
 
+## ⚠️ Important Notice
+- It is **strongly recommended to use a Bluetooth proxy instead of a built-in Bluetooth adapter**.  
+  Bluetooth proxies generally offer more stable connections and better range, especially in environments with multiple BLE devices.
+- When using a Bluetooth proxy, it is strongly recommended to **keep the scan interval at its default value**.  
+  Changing these values may cause issues with Bluetooth data transmission.
+- **bluetooth_proxy:** must always have **active: true**.
+  
+  Example (recommended configuration with default values):
+
+  ```yaml
+  esp32_ble_tracker:
+    scan_parameters:
+      active: true
+  
+  bluetooth_proxy:
+    active: true
+
 ## Spells & Motions
 >[!IMPORTANT]
 >You must connect to the wand via Bluetooth(Switch) first in order to receive the spell values.
