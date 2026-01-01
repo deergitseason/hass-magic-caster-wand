@@ -2,6 +2,7 @@
 
 import logging
 import dataclasses
+import asyncio
 
 from .mcw_ble import BLEData
 
@@ -36,6 +37,9 @@ from homeassistant.util import dt as dt_util
 from .const import DOMAIN, MANUFACTURER
 
 _LOGGER = logging.getLogger(__name__)
+
+# Configuration: Time in seconds before resetting to "waiting" state
+SPELL_RESET_DELAY = 2.0  # You can adjust this value (1.0 to 3.0 seconds recommended)
 
 SENSORS_MAPPING_TEMPLATE: dict[str, SensorEntityDescription] = {
     # "battery": SensorEntityDescription(
@@ -173,16 +177,17 @@ class McwSellSensor(
 
     def __init__(self, hass: HomeAssistant, entry: config_entries.ConfigEntry, coordinator: DataUpdateCoordinator[str]):
         CoordinatorEntity.__init__(self, coordinator)
-        # self.hass = hass
+        self.hass = hass  # Store hass reference for async operations
         self._address = hass.data[DOMAIN][entry.entry_id]['address']
         self._mcw = hass.data[DOMAIN][entry.entry_id]['mcw']
         self._identifier = self._address.replace(":", "")[-8:]
         self._attr_name = f"Mcw {self._identifier} Spell"
         self._attr_unique_id = f"mcw_{self._identifier}_spell"
-        self._spell = "awaiting"
+        self._spell = "waiting"  # Changed from "awaiting" to "waiting"
         self._attr_extra_state_attributes = {
             "last_updated": None
         }
+        self._reset_task = None  # Track the reset task
 
 
 
@@ -216,12 +221,35 @@ class McwSellSensor(
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        _LOGGER.debug("Updated spell data")
+        _LOGGER.debug("Updated spell data: %s", self.coordinator.data)
+        
+        # Cancel any existing reset task
+        if self._reset_task is not None:
+            self._reset_task.cancel()
+            self._reset_task = None
+        
+        # Update the spell
         self._spell = self.coordinator.data
-        self._attr_extra_state_attributes["last_updated"] = (
-            dt_util.now()
-        )
+        self._attr_extra_state_attributes["last_updated"] = dt_util.now()
+        
+        # Trigger the state update
         super()._handle_coordinator_update()
+        
+        # Schedule reset to "waiting" state if spell is not already "waiting"
+        if self._spell != "waiting":
+            self._reset_task = asyncio.create_task(self._reset_spell_state())
+
+    async def _reset_spell_state(self) -> None:
+        """Reset spell state to 'waiting' after a delay."""
+        try:
+            await asyncio.sleep(SPELL_RESET_DELAY)
+            _LOGGER.debug("Resetting spell state to 'waiting'")
+            self._spell = "waiting"
+            self.async_write_ha_state()  # Force update
+            self._reset_task = None
+        except asyncio.CancelledError:
+            _LOGGER.debug("Spell reset cancelled (new spell detected)")
+            pass
 
 class McwBatterySensor(
     CoordinatorEntity[DataUpdateCoordinator[float]], 
